@@ -96,10 +96,10 @@ for event in Tree_Input:
 
     for Layer in event.Hit_Sensor_Layer:
         skiroc = (event.Hit_Sensor_Skiroc)[Count]
-        # HG = (event.Hit_Sensor_Cell_HG)[Count]  - (event.Hit_Sensor_Cell_HG_Sub)[Count]
-        # LG = (event.Hit_Sensor_Cell_LG)[Count] - (event.Hit_Sensor_Cell_LG_Sub)[Count]
-        HG = (event.Hit_Sensor_Cell_HG_Amplitude)[Count]
-        LG = (event.Hit_Sensor_Cell_LG_Amplitude)[Count]
+        HG = (event.Hit_Sensor_Cell_HG)[Count]  - (event.Hit_Sensor_Cell_HG_Sub)[Count]
+        LG = (event.Hit_Sensor_Cell_LG)[Count] - (event.Hit_Sensor_Cell_LG_Sub)[Count]
+        # HG = (event.Hit_Sensor_Cell_HG_Amplitude)[Count]
+        # LG = (event.Hit_Sensor_Cell_LG_Amplitude)[Count]
         TOT = (event.Hit_Sensor_Cell_ToT_Slow)[Count]
         Count +=1 # Don't forget this guy.
         # MIP = ADCtoMIPS(HG,LG,TOT,1)
