@@ -23,9 +23,9 @@ Tree_Input = F_Input.Get("pulseshapeplotter/T")#
 
 
 # for ADCtoMIPs ...
-f=open("Final_Oct_H6_HG_LG_Datbase.txt")
+f=open("Oct_H2_TS3_HG_LG_Datbase.txt")
 lines=f.readlines()
-f2=open("Final_Oct_H6_LG_TOT_Datbase.txt")
+f2=open("Oct_H2_TS3_LG_TOT_Datbase.txt")
 lines2=f2.readlines()
 # print ADCtoMIPS(0,0,2700,2500,376,lines,lines2)
 '''
@@ -93,13 +93,13 @@ for event in Tree_Input:
 
     check +=1
 
-
+    ii=0
     for Layer in event.Hit_Sensor_Layer:
         skiroc = (event.Hit_Sensor_Skiroc)[Count]
-        # HG = (event.Hit_Sensor_Cell_HG)[Count]  - (event.Hit_Sensor_Cell_HG_Sub)[Count]
-        # LG = (event.Hit_Sensor_Cell_LG)[Count] - (event.Hit_Sensor_Cell_LG_Sub)[Count]
-        HG = (event.Hit_Sensor_Cell_HG_Amplitude)[Count]
-        LG = (event.Hit_Sensor_Cell_LG_Amplitude)[Count]
+        HG = (event.Hit_Sensor_Cell_HG)[Count]  - (event.Hit_Sensor_Cell_HG_Sub)[Count]
+        LG = (event.Hit_Sensor_Cell_LG)[Count] - (event.Hit_Sensor_Cell_LG_Sub)[Count]
+        # HG = (event.Hit_Sensor_Cell_HG_Amplitude)[Count]
+        # LG = (event.Hit_Sensor_Cell_LG_Amplitude)[Count]
         TOT = (event.Hit_Sensor_Cell_ToT_Slow)[Count]
         Count +=1 # Don't forget this guy.
         # MIP = ADCtoMIPS(HG,LG,TOT,1)

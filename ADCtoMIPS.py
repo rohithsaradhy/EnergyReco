@@ -38,12 +38,14 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None):
 		TP_LG2HG = 1500
 		TP_TOT2LG = 1200
 		#get 2 and 4 which are the CF and TP
-		ConvFac_LG2HG = lines[4*board+skiroc].split()[2]
-		TP_LG2HG = lines[4*board+skiroc].split()[6]
-		ConvFac_TOT2LG =  lines2[4*board+skiroc].split()[2]
-		# ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4]
-		TP_TOT2LG = lines2[4*board+skiroc].split()[6]
+		shift=2 #Adjusting for the new format
+		ConvFac_LG2HG = lines[4*board+skiroc].split()[2+shift]
+		TP_LG2HG = lines[4*board+skiroc].split()[6+shift]
+		ConvFac_TOT2LG =  lines2[4*board+skiroc].split()[2+shift]
+		# ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4+shift]
+		TP_TOT2LG = lines2[4*board+skiroc].split()[6+shift]
 		# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n")
+		# print str(TP_LG2HG) + "\t" + str(board)+"\t" + str(skiroc)
 		if hg <= TP_LG2HG:
 			result=hg/ADC_per_Mips
 			return result

@@ -18,8 +18,8 @@ Tree_Input = F_Input.Get("pulseshapeplotter/T")# The tree is named "T" in the fo
 
 
 # for ADCtoMIPs ...
-f=open("Final_Oct_H6_HG_LG_Datbase.txt")
-f2=open("Final_Oct_H6_LG_TOT_Datbase.txt")
+f=open("Oct_H2_TS3_HG_LG_Datbase.txt")
+f2=open("Oct_H2_TS3_LG_TOT_Datbase.txt")
 lines=f.readlines()
 lines2=f2.readlines()
 # ADCtoMIPS(0,0,2700,2500,376,lines,lines2)
@@ -130,6 +130,8 @@ for event in Tree_Input: #taking the entries in the tree... Here they are events
         # LG = (event.Hit_Sensor_Cell_LG_Amplitude)[Count]
         Count += 1
         MIP0 = ADCtoMIPS(HG,LG,TOT,0)
+        # ADCtoMIPS(board,skiroc,HG,LG,TOTSlow,lines,lines2)
+        # ADCtoMIPS(HG,LG,TOTSlow,Option)# Option 0 => ConvFac_TOT2LG=2.8 and 1:=>ConvFac_TOT2LG_Exp=10
         # MIP1 = ADCtoMIPS(HG,LG,TOT,1) # Currently Not Used...
         if MIP0 >= 4 :
             if Layer < 7: # For EE layers...
