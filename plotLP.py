@@ -31,7 +31,7 @@ for line in lines:
 
 Canvas1 = ROOT.TCanvas("LinearGraph","LinearGraph",1366,768)
 Canvas1.cd()
-LGrp = ROOT.TGraphErrors(int(len(eng)),eng,mean,engErr,meanErr)
+LGrp = ROOT.TGraphErrors(int(len(eng)),eng,mean,engErr,sig)
 LGrp.SetTitle("")
 LGrp.GetXaxis().SetTitle("Beam Energy (GeV)");
 LGrp.GetXaxis().SetLabelFont(62);
