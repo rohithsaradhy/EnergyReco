@@ -30,14 +30,14 @@ Tree_Input = F_Input.Get("pulseshapeplotter/T")#
 # f=open("Oct_H2_PFA_HG_LG_Datbase.txt")
 # f=open("Oct_H2_TS3_HG_LG_Datbase.txt")
 f=open("CalibrationInfo/Oct_H2_TS3_CM_HG_LG_Datbase.txt")
-lines=f.readlines()
+HG2LG_Calib=f.readlines()
 # f2=open("Oct_H2_PFA_LG_TOT_Datbase.txt")
 # f2=open("Oct_H2_TS3_LG_TOT_Datbase.txt")
-f2=open("CalibrationInfo/Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
-lines2=f2.readlines()
+f=open("CalibrationInfo/Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
+LG2TOT_Calib=f.readlines()
 
 
-f=open("CalibrationInfo/layerGeom_oct2017_h6_20layers.txt")
+f=open("CalibrationInfo/layerGeom_oct2017_h2_17layers.txt")
 a=f.readlines()
 f=open("CalibrationInfo/hgcal_calibration.txt")
 b=f.readlines()
@@ -78,20 +78,8 @@ Reference branches available...
   T->Branch("Hit_Sensor_Cell_LG_NCalls", &Hit_Sensor_Cell_LG_NCalls);
 '''
 
-EnergyDeposited_LayerHist = []
-Canvas = []
-histogram_name = "EnergyDeposited_Layer_"
 name = "Energy All Layers for Energy " + str(energy) + " GeV"
 Total_Energy_Hist = ROOT.TH1F(name,name,120,0,2500)
-for iii in range(0,17):
-    name = histogram_name + str(iii)
-    Histogram = ROOT.TH1F(name, name, 200, 0, 2000)
-    EnergyDeposited_LayerHist.append(Histogram)
-
-# creating and array of sums for energies deposited...
-sumLayer=[]
-for i in range(0,17):
-	sumLayer.append(0.0)
 
 check = 0.0
 maxEvents = Tree_Input.GetEntries()
@@ -120,10 +108,9 @@ for event in Tree_Input:
         Count +=1 # Don't forget this guy.
         # MIP = ADCtoMIPS(HG,LG,TOT,1)
         skiIndex = Layer*4 + skiroc
-        MIP = ADCtoMIPS(Layer,skiroc,HG,LG,TOT,lines,lines2,ski_calib_data[skiIndex])
+        MIP = ADCtoMIPS(Layer,skiroc,HG,LG,TOT,HG2LG_Calib,LG2TOT_Calib,ski_calib_data[skiIndex])
         if (MIP > 2): #NTuple only records MIP > 2
             totalSum += MIP
-            sumLayer[Layer] += MIP
             if (Layer < 7):
                 EnergySUM_EE_Layers += MIP
             else:
@@ -148,27 +135,6 @@ print
 mini = 100000000000000
 selected_FitRangeMin = 0
 selected_FitRangeMax = 0
-# Try till the most probable value...
-# MPV = Total_Energy_Hist.GetBinLowEdge(Total_Energy_Hist.GetMaximumBin())
-
-# increment =50
-# width =200
-# NDF = {20:16, 32: 20,50:30,80:30,90:30} #Can be optimised dictionary {key:value}
-# for upperRange in range(100,2500,increment):
-#     for lowerRange in range(150,upperRange,increment):
-#         Total_Energy_Hist.Fit("gaus","QM","",lowerRange,upperRange) #,"QM",1000,2250)
-#         if Total_Energy_Hist.GetFunction("gaus").GetNDF() ==0 or Total_Energy_Hist.GetFunction("gaus").GetNDF() < NDF[energy]:
-#             continue
-#         Chi =(Total_Energy_Hist.GetFunction("gaus").GetChisquare()/Total_Energy_Hist.GetFunction("gaus").GetNDF())
-#         value = abs( Chi- 1 )
-#         # print str(upperRange)+"\t"+ str(lowerRange) +"\t"+ str(Chi)+"\t"+ str(value) + "\t" + str(Total_Energy_Hist.GetFunction("gaus").GetNDF())
-#         if value < mini:
-#             mini = value
-#             selected_FitRangeMin = lowerRange
-#             selected_FitRangeMax = upperRange
-#
-#
-# print "Selected Lower Fit Range is " +str(selected_FitRangeMin)+"\t"+ str(selected_FitRangeMax) + " and correspoding closeness is " + str(mini)
 
 MPV = Total_Energy_Hist.GetBinLowEdge(Total_Energy_Hist.GetMaximumBin())+ Total_Energy_Hist.GetBinWidth(Total_Energy_Hist.GetMaximumBin())/2
 
@@ -192,13 +158,3 @@ print
 name = "./Analysed/AllLayer_"+str(energy)+"GeV.png"
 Total_Energy_Hist.Draw()
 ROOT.gPad.SaveAs(name)
-
-
-# F_Output = ROOT.TFile(name, "UPDATE") ## To store some histograms from the Tree
-for i in range(0,17):
-    name = "./Analysed/layer"+str(i)+".png"
-    EnergyDeposited_LayerHist[i].Draw()
-    ROOT.gPad.SaveAs(name)
-
-
-# raw_input("Enter to Exit")
