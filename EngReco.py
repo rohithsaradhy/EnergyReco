@@ -21,6 +21,7 @@ if len(sys.argv) > 1:
 
 # F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/New_Data/Oct_NTuple/Electron/"+str(energy)+"GeV.root"
 F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Electron/"+str(energy)+"GeV.root"
+# F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Pion/"+str(energy)+"GeV.root"
 print "Opening File: " + F_Input_Name
 F_Input = ROOT.TFile(F_Input_Name)
 Tree_Input = F_Input.Get("pulseshapeplotter/T")#
@@ -132,13 +133,8 @@ for event in Tree_Input:
 
 print
 
-mini = 100000000000000
-selected_FitRangeMin = 0
-selected_FitRangeMax = 0
-
 MPV = Total_Energy_Hist.GetBinLowEdge(Total_Energy_Hist.GetMaximumBin())+ Total_Energy_Hist.GetBinWidth(Total_Energy_Hist.GetMaximumBin())/2
 
-# Fit = Total_Energy_Hist.Fit("gaus","QSM","",selected_FitRangeMin,selected_FitRangeMax) #,"QM",1000,2250)
 Fit = Total_Energy_Hist.Fit("gaus","QSM","",MPV-200,MPV + 200) #,"QM",1000,2250)
 
 GausMean = Fit.Parameter(1)
@@ -147,14 +143,15 @@ GausSig = Fit.Parameter(2)
 GausSigErr = Fit.ParError(2)
 
 print str(GausMean) + "\t" + str(GausSig)+ "\t" + str(MPV)
-filename = "Analysed/OutputForLinearPlot.txt"
+fitName = 'CF3'
+filename = "Analysed/"+fitName+"_OutputForLinearPlot.txt"
 file = open(filename,'a')
-outText = "CF3\t"+str(energy) + "\t"+str(GausMean)+ "\t"+str(GausMeanErr) + "\t" + str(GausSig)+ "\t"+str(GausSigErr)+ "\t" + str(MPV) +"\n"
+outText = fitName + "\t" + str(energy) + "\t"+str(GausMean)+ "\t"+str(GausMeanErr) + "\t" + str(GausSig)+ "\t"+str(GausSigErr)+ "\t" + str(MPV) +"\n"
 file.write(outText)
 file.close()
 
 
 print
-name = "./Analysed/AllLayer_"+str(energy)+"GeV.png"
+name = "./Analysed/"+fitName+"_AllLayer_"+str(energy)+"GeV.png"
 Total_Energy_Hist.Draw()
 ROOT.gPad.SaveAs(name)

@@ -113,6 +113,7 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 			ConvFac_TOT2LG =  lines2[4*board+skiroc].split()[2+shift]
 			# ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4+shift]
 			ConvFac_TOT2LG =  3.
+
 			TP_TOT2LG =1200. # lines2[4*board+skiroc].split()[6+shift]
 			# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n")
 			# print str(ConvFac_LG2HG) + "\t" +str(TP_LG2HG) + "\t" + str(board)+"\t" + str(skiroc)

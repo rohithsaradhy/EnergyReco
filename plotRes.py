@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import ROOT
+import math
 from array import array
 
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
@@ -16,6 +17,7 @@ sig=array( 'f' )
 sigErr=array( 'f' )
 mvp=array( 'f' )
 res=array( 'f' )
+resErr=array( 'f' )
 
 
 
@@ -29,25 +31,34 @@ for line in lines:
     sig.append(float(line.split()[3+shift]))
     sigErr.append(float(line.split()[4+shift]))
     mvp.append(float(line.split()[5+shift]))
-    res.append(float(line.split()[3+shift])/float(line.split()[1]))
+
+
+    reso = float(line.split()[3+shift])/float(line.split()[1+shift])
+    sigma =float(line.split()[3+shift])
+    sigmaErr = float(line.split()[4+shift])
+
+
+    res.append(reso)
+    resErr.append(reso*sigmaErr/sigma)
+
 
 Canvas1 = ROOT.TCanvas("LinearGraph","LinearGraph",1366,768)
 Canvas1.cd()
 
 
-LGrp = ROOT.TGraphErrors(int(len(eng)),eng,mean,engErr,sig)
+LGrp = ROOT.TGraphErrors(int(len(eng)),eng,res,engErr,resErr)
 
 LGrp.SetMarkerStyle(20)
 LGrp.SetMarkerSize(2)
 LGrp.SetMarkerColor(ROOT.kRed)
-
-
-f = LGrp.Fit("pol1","QMES","",20,50)
+fitFunction = ROOT.TF1("fitFunction","sqrt([0]^2/x + [1]^2/(x^2) + [2]^2)")
+f = LGrp.Fit("fitFunction","QMES","",20,50)
 
 y=array('f')
 x=array('f')
 for i in range(20,90):
-    y.append(f.Parameter(1)*float(i) + f.Parameter(0))
+    resolution = math.sqrt(math.pow(f.Parameter(0),2)/float(i) + math.pow(f.Parameter(1)/float(i),2) + math.pow(f.Parameter(2),2))
+    y.append(resolution)
     x.append(float(i))
 
 LGrph = ROOT.TGraph(int(len(x)),x,y)
@@ -56,8 +67,10 @@ LGrph.SetLineColor(ROOT.kRed)
 LGrph.SetLineStyle(5)
 # LGrph.SetMarkerSize(2)
 
-MGrp = ROOT.TMultiGraph()
 
+ROOT.gStyle.SetOptFit(11111)
+
+MGrp = ROOT.TMultiGraph()
 MGrp.Add(LGrp,"AP")
 MGrp.Add(LGrph,"AL")
 
@@ -70,7 +83,7 @@ MGrp.GetXaxis().SetTitleFont(62);
 MGrp.GetXaxis().SetTitleOffset(1.0);
 MGrp.GetXaxis().SetTitleSize(0.048);
 
-MGrp.GetYaxis().SetTitle("Mean MIPS");
+MGrp.GetYaxis().SetTitle("#frac{#sigma_{E}}{<E>}");
 MGrp.GetYaxis().SetLabelFont(62);
 MGrp.GetYaxis().SetTitleFont(62);
 MGrp.GetYaxis().SetTitleOffset(1.0);
@@ -99,7 +112,10 @@ label1.Draw("same");
 Canvas1.SetGridx();
 Canvas1.SetGridy();
 Canvas1.Update()
-name = "Analysed/"+fitName+"_LinearPlot.png"
+
+
+name = "Analysed/"+fitName+"_ResolutionPlot.png"
 Canvas1.SaveAs(name)
+
 
 # raw_input("Enter to exit")
