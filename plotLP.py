@@ -31,25 +31,50 @@ for line in lines:
 
 Canvas1 = ROOT.TCanvas("LinearGraph","LinearGraph",1366,768)
 Canvas1.cd()
-LGrp = ROOT.TGraphErrors(int(len(eng)),eng,mean,engErr,sig)
-LGrp.SetTitle("")
-LGrp.GetXaxis().SetTitle("Beam Energy (GeV)");
-LGrp.GetXaxis().SetLabelFont(62);
-LGrp.GetXaxis().SetTitleFont(62);
-LGrp.GetXaxis().SetTitleOffset(1.0);
-LGrp.GetXaxis().SetTitleSize(0.048);
 
-LGrp.GetYaxis().SetTitle("Mean MIPS");
-LGrp.GetYaxis().SetLabelFont(62);
-LGrp.GetYaxis().SetTitleFont(62);
-LGrp.GetYaxis().SetTitleOffset(1.0);
-LGrp.GetYaxis().SetTitleSize(0.048);
+
+LGrp = ROOT.TGraphErrors(int(len(eng)),eng,mean,engErr,sig)
 
 LGrp.SetMarkerStyle(20)
 LGrp.SetMarkerSize(2)
 LGrp.SetMarkerColor(ROOT.kRed)
-LGrp.Draw("AP")
-LGrp.Fit("pol1","QME")
+
+
+f = LGrp.Fit("pol1","QMES","",20,50)
+
+y=array('f')
+x=array('f')
+for i in range(20,90):
+    y.append(f.Parameter(1)*float(i) + f.Parameter(0))
+    x.append(float(i))
+
+LGrph = ROOT.TGraph(int(len(x)),x,y)
+# LGrph.SetMarkerStyle(20)
+LGrph.SetLineColor(ROOT.kRed)
+LGrph.SetLineStyle(5)
+# LGrph.SetMarkerSize(2)
+
+MGrp = ROOT.TMultiGraph()
+
+MGrp.Add(LGrp,"AP")
+MGrp.Add(LGrph,"AL")
+
+MGrp.Draw("A")
+
+MGrp.SetTitle("")
+MGrp.GetXaxis().SetTitle("Beam Energy (GeV)");
+MGrp.GetXaxis().SetLabelFont(62);
+MGrp.GetXaxis().SetTitleFont(62);
+MGrp.GetXaxis().SetTitleOffset(1.0);
+MGrp.GetXaxis().SetTitleSize(0.048);
+
+MGrp.GetYaxis().SetTitle("Mean MIPS");
+MGrp.GetYaxis().SetLabelFont(62);
+MGrp.GetYaxis().SetTitleFont(62);
+MGrp.GetYaxis().SetTitleOffset(1.0);
+MGrp.GetYaxis().SetTitleSize(0.048);
+
+
 # ROOT.gStyle.SetOptFit(1111)
 
 label2  = ROOT.TPaveText(0.09278351,0.9077253,0.3048601,0.9663805,"brNDC");
@@ -67,7 +92,7 @@ label1.SetFillStyle(0);
 label1.SetTextAlign(12);
 label1.SetTextSize(0.059);
 label1.SetTextFont (62);
-label1.AddText("HGCAL test beam, Sept 2017");
+label1.AddText("HGCAL test beam, Oct 2017");
 label1.Draw("same");
 Canvas1.SetGridx();
 Canvas1.SetGridy();
@@ -75,4 +100,4 @@ Canvas1.Update()
 Canvas1.SaveAs("LinearPlot.png")
 
 
-raw_input("Enter to exit")
+# raw_input("Enter to exit")
