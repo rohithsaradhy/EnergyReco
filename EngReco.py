@@ -26,11 +26,11 @@ Tree_Input = F_Input.Get("pulseshapeplotter/T")#
 # for ADCtoMIPs ...
 # f=open("Oct_H2_PFA_HG_LG_Datbase.txt")
 # f=open("Oct_H2_TS3_HG_LG_Datbase.txt")
-f=open("Oct_H2_TS3_CM_HG_LG_Datbase.txt")
+f=open("CalibrationInfo/Oct_H2_TS3_CM_HG_LG_Datbase.txt")
 lines=f.readlines()
 # f2=open("Oct_H2_PFA_LG_TOT_Datbase.txt")
 # f2=open("Oct_H2_TS3_LG_TOT_Datbase.txt")
-f2=open("Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
+f2=open("CalibrationInfo/Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
 lines2=f2.readlines()
 # print ADCtoMIPS(0,0,2700,2500,376,lines,lines2)
 '''
@@ -109,6 +109,7 @@ for event in Tree_Input:
         Count +=1 # Don't forget this guy.
         # MIP = ADCtoMIPS(HG,LG,TOT,1)
         MIP = ADCtoMIPS(Layer,skiroc,HG,LG,TOT,lines,lines2)
+        break
         if (MIP > 2): #NTuple only records MIP > 2
             totalSum += MIP
             sumLayer[Layer] += MIP
