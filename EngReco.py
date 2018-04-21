@@ -27,12 +27,12 @@ Tree_Input = F_Input.Get("pulseshapeplotter/T")#
 
 
 # for ADCtoMIPs ...
-# f=open("Oct_H2_PFA_HG_LG_Datbase.txt")
-# f=open("Oct_H2_TS3_HG_LG_Datbase.txt")
+# f=open("CalibrationInfo/Oct_H2_PFA_HG_LG_Datbase.txt")
+# f=open("CalibrationInfo/Oct_H2_TS3_HG_LG_Datbase.txt")
 f=open("CalibrationInfo/Oct_H2_TS3_CM_HG_LG_Datbase.txt")
 HG2LG_Calib=f.readlines()
-# f2=open("Oct_H2_PFA_LG_TOT_Datbase.txt")
-# f2=open("Oct_H2_TS3_LG_TOT_Datbase.txt")
+# f=open("CalibrationInfo/Oct_H2_PFA_LG_TOT_Datbase.txt")
+# f=open("CalibrationInfo/Oct_H2_TS3_LG_TOT_Datbase.txt")
 f=open("CalibrationInfo/Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
 LG2TOT_Calib=f.readlines()
 
@@ -147,9 +147,9 @@ GausSig = Fit.Parameter(2)
 GausSigErr = Fit.ParError(2)
 
 print str(GausMean) + "\t" + str(GausSig)+ "\t" + str(MPV)
-filename = "OutputForLinearPlot.txt"
+filename = "Analysed/OutputForLinearPlot.txt"
 file = open(filename,'a')
-outText = str(energy) + "\t"+str(GausMean)+ "\t"+str(GausMeanErr) + "\t" + str(GausSig)+ "\t"+str(GausSigErr)+ "\t" + str(MPV) +"\n"
+outText = "CF3\t"+str(energy) + "\t"+str(GausMean)+ "\t"+str(GausMeanErr) + "\t" + str(GausSig)+ "\t"+str(GausSigErr)+ "\t" + str(MPV) +"\n"
 file.write(outText)
 file.close()
 

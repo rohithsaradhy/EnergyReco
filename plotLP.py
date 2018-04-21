@@ -3,7 +3,7 @@ import ROOT
 from array import array
 
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
-filename = "OutputForLinearPlot.txt"
+filename = "Analysed/OutputForLinearPlot.txt"
 f=open(filename)
 lines=f.readlines()
 
@@ -20,14 +20,15 @@ res=array( 'f' )
 
 
 for line in lines:
-    eng.append(float(line.split()[0]))
-    engErr.append(0.001*float(line.split()[0]))
-    mean.append(float(line.split()[1]))
-    meanErr.append(float(line.split()[2]))
-    sig.append(float(line.split()[3]))
-    sigErr.append(float(line.split()[4]))
-    mvp.append(float(line.split()[5]))
-    res.append(float(line.split()[3])/float(line.split()[1]))
+    shift =1
+    eng.append(float(line.split()[0+shift]))
+    engErr.append(0.001*float(line.split()[0+shift]))
+    mean.append(float(line.split()[1+shift]))
+    meanErr.append(float(line.split()[2+shift]))
+    sig.append(float(line.split()[3+shift]))
+    sigErr.append(float(line.split()[4+shift]))
+    mvp.append(float(line.split()[5+shift]))
+    res.append(float(line.split()[3+shift])/float(line.split()[1]))
 
 Canvas1 = ROOT.TCanvas("LinearGraph","LinearGraph",1366,768)
 Canvas1.cd()
@@ -97,7 +98,7 @@ label1.Draw("same");
 Canvas1.SetGridx();
 Canvas1.SetGridy();
 Canvas1.Update()
-Canvas1.SaveAs("LinearPlot.png")
+Canvas1.SaveAs("Analysed/LinearPlot.png")
 
 
 # raw_input("Enter to exit")
