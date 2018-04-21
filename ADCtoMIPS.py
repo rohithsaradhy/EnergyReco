@@ -18,6 +18,11 @@ def getAdc2MipBoard(brd2Module_File,calib_File=None):
 				if(brd[i] == line.split()[0]):
 					board = i
 					break
+				else:
+					print "Didn't find the Board with the module number"
+					print "Setting board to 100"
+					board=100
+
 
 			ski[4*board+int(line.split()[1])] = line.split()[2]
 			# print str(board)+"\t" + str(int(line.split()[1])) +"\t"+ str(4*int(board) + int(line.split()[1])) + "\t" + line.split()[2]
@@ -43,20 +48,20 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 		totSlow=c;
 		opt=d
 		if opt == 1:
-			if hg <= TP_LG2HG:
+			if float(hg) <= float(TP_LG2HG):
 				result=hg/ADC_per_Mips
 				return result
-			elif lg <= TP_TOT2LG:
+			elif float(lg) <= float(TP_TOT2LG):
 				result = (lg*ConvFac_LG2HG)/ADC_per_Mips
 				return result
 			else:
 				result = (totSlow*ConvFac_TOT2LG_Exp*ConvFac_LG2HG)/ADC_per_Mips
 				return result
 		elif opt == 0:
-			if hg <= TP_LG2HG:
+			if float(hg) <= float(TP_LG2HG):
 				result=hg/ADC_per_Mips
 				return result
-			elif lg <= TP_TOT2LG:
+			elif float(lg) <= float(TP_TOT2LG):
 				result = (lg*ConvFac_LG2HG)/ADC_per_Mips
 				return result
 			else:
@@ -85,10 +90,10 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 		TP_TOT2LG =1200. # lines2[4*board+skiroc].split()[6+shift]
 		# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n")
 		# print str(ConvFac_LG2HG) + "\t" +str(TP_LG2HG) + "\t" + str(board)+"\t" + str(skiroc)
-		if hg <= TP_LG2HG:
+		if float(hg) <= float(TP_LG2HG):
 			result=float(hg)*float(adc2Mip)
 			return result
-		elif lg <= TP_TOT2LG:
+		elif float(lg) <= float(TP_TOT2LG):
 			result = (float(lg)*float(ConvFac_LG2HG))*float(adc2Mip)
 			return result
 		else:
@@ -112,17 +117,19 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 			TP_LG2HG =lines[4*board+skiroc].split()[6+shift]
 			ConvFac_TOT2LG =  lines2[4*board+skiroc].split()[2+shift]
 			# ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4+shift]
-			ConvFac_TOT2LG =  3.
+			ConvFac_TOT2LG =  10.
+
 
 			TP_TOT2LG =1200. # lines2[4*board+skiroc].split()[6+shift]
-			# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n")
-			# print str(ConvFac_LG2HG) + "\t" +str(TP_LG2HG) + "\t" + str(board)+"\t" + str(skiroc)
-			if hg <= TP_LG2HG:
+			print hg
+			print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n" + str(adc2Mip) + "\n")
+			if float(hg) <= float(TP_LG2HG):
 				result=float(hg)*float(adc2Mip)
 				return result
-			elif lg <= TP_TOT2LG:
+			elif float(lg) <= float(TP_TOT2LG):
 				result = (float(lg)*float(ConvFac_LG2HG))*float(adc2Mip)
 				return result
 			else:
 				result = float(totSlow)*float(ConvFac_TOT2LG)*float(ConvFac_LG2HG)*float(adc2Mip)
+				print "hi"
 				return result
