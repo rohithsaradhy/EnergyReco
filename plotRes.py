@@ -4,8 +4,8 @@ import math
 from array import array
 
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
-fitName = 'CF3'
-filename = "Analysed/"+fitName+"_OutputForLinearPlot.txt"
+fitName = 'CF13'
+filename = "Analysed/OutputForLinearPlot_"+fitName+".txt"
 f=open(filename)
 lines=f.readlines()
 
@@ -68,7 +68,7 @@ LGrph.SetLineStyle(5)
 # LGrph.SetMarkerSize(2)
 
 
-ROOT.gStyle.SetOptFit(11111)
+# ROOT.gStyle.SetOptFit(11111)
 
 MGrp = ROOT.TMultiGraph()
 MGrp.Add(LGrp,"AP")
@@ -114,7 +114,7 @@ Canvas1.SetGridy();
 Canvas1.Update()
 
 
-name = "Analysed/"+fitName+"_ResolutionPlot.png"
+name = "Analysed/ResolutionPlot_"+fitName+".png"
 Canvas1.SaveAs(name)
 
 

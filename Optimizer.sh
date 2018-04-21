@@ -2,10 +2,11 @@
 
 adcFile="ADCtoMIPS.py"
 energyFile="EngReco.py"
-for i in {3..20}
+for i in {1..13..1}
 do
-sed -i '115s/.*/'"			ConvFac_TOT2LG =  "$i"."'/' $adcFile
-sed -i '146s/.*/'"fitName = 'CF"$i"'"'/' $energyFile
+echo "Doing now for CF ="$i
+sed -i '120s/.*/'"			ConvFac_TOT2LG =  "$i"."'/' $adcFile
+sed -i '149s/.*/'"fitName = 'CF"$i"'"'/' $energyFile
 sed -i '7s/.*/'"fitName = 'CF"$i"'"'/' plotRes.py
 sed -i '6s/.*/'"fitName = 'CF"$i"'"'/' plotLP.py
 
@@ -14,5 +15,5 @@ sed -i '6s/.*/'"fitName = 'CF"$i"'"'/' plotLP.py
 ./plotRes.py
 
 
-read -p "Press [Enter] key to start Continue..."
+# read -p "Press [Enter] key to start Continue..."
 done

@@ -3,8 +3,8 @@ import ROOT
 from array import array
 
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
-fitName = 'CF3'
-filename = "Analysed/"+fitName+"_OutputForLinearPlot.txt"
+fitName = 'CF13'
+filename = "Analysed/OutputForLinearPlot_"+fitName+".txt"
 f=open(filename)
 lines=f.readlines()
 
@@ -99,7 +99,7 @@ label1.Draw("same");
 Canvas1.SetGridx();
 Canvas1.SetGridy();
 Canvas1.Update()
-name = "Analysed/"+fitName+"_LinearPlot.png"
+name = "Analysed/LinearPlot_"+fitName+".png"
 Canvas1.SaveAs(name)
 
 # raw_input("Enter to exit")

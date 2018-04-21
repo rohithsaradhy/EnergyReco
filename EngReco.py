@@ -43,8 +43,11 @@ a=f.readlines()
 f=open("CalibrationInfo/hgcal_calibration.txt")
 b=f.readlines()
 ski_calib_data = getAdc2MipBoard(a,b)
+# print ski_calib_data[0]
+# print ADCtoMIPS(0,0,1661.95,1200.1,170,HG2LG_Calib,LG2TOT_Calib,ski_calib_data[0])
+# raw_input("enter to continue")
 
-# print ADCtoMIPS(0,0,2700,2500,376,lines,lines2)
+
 '''
 Reference branches available...
 
@@ -80,7 +83,7 @@ Reference branches available...
 '''
 
 name = "Energy All Layers for Energy " + str(energy) + " GeV"
-Total_Energy_Hist = ROOT.TH1F(name,name,120,0,2500)
+Total_Energy_Hist = ROOT.TH1F(name,name,110,0,3000)
 
 check = 0.0
 maxEvents = Tree_Input.GetEntries()
@@ -117,11 +120,11 @@ for event in Tree_Input:
             else:
                 EnergySUM_FH_Layers += MIP
 
-    if (EnergySUM_EE_Layers >0):
-        if (EnergySUM_EE_Layers/(EnergySUM_EE_Layers+EnergySUM_FH_Layers) > 0.94): # Pion veto...
-            if totalSum > 50:
-                if energy > 79:
-                    if(totalSum > 500):
+    if (EnergySUM_EE_Layers >0.0):
+        if (EnergySUM_EE_Layers/(EnergySUM_EE_Layers+EnergySUM_FH_Layers) > 0.92): # Pion veto...
+            if totalSum > 50.0:
+                if energy > 49:
+                    if(totalSum > 500.0):
                         Total_Energy_Hist.Fill(totalSum)
                 else:
                     Total_Energy_Hist.Fill(totalSum)
@@ -141,10 +144,10 @@ GausMean = Fit.Parameter(1)
 GausMeanErr = Fit.ParError(1)
 GausSig = Fit.Parameter(2)
 GausSigErr = Fit.ParError(2)
-
+ROOT.gStyle.SetOptFit(0000)
 print str(GausMean) + "\t" + str(GausSig)+ "\t" + str(MPV)
-fitName = 'CF3'
-filename = "Analysed/"+fitName+"_OutputForLinearPlot.txt"
+fitName = 'CF13'
+filename = "Analysed/OutputForLinearPlot_"+fitName+".txt"
 file = open(filename,'a')
 outText = fitName + "\t" + str(energy) + "\t"+str(GausMean)+ "\t"+str(GausMeanErr) + "\t" + str(GausSig)+ "\t"+str(GausSigErr)+ "\t" + str(MPV) +"\n"
 file.write(outText)
@@ -152,6 +155,6 @@ file.close()
 
 
 print
-name = "./Analysed/"+fitName+"_AllLayer_"+str(energy)+"GeV.png"
+name = "./Analysed/AllLayer_"+str(energy)+"GeV_"+fitName+".png"
 Total_Energy_Hist.Draw()
 ROOT.gPad.SaveAs(name)

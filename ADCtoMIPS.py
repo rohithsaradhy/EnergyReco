@@ -19,8 +19,8 @@ def getAdc2MipBoard(brd2Module_File,calib_File=None):
 					board = i
 					break
 				else:
-					print "Didn't find the Board with the module number"
-					print "Setting board to 100"
+					# print "Didn't find the Board with the module number"
+					# print "Setting board to 100"
 					board=100
 
 
@@ -117,12 +117,12 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 			TP_LG2HG =lines[4*board+skiroc].split()[6+shift]
 			ConvFac_TOT2LG =  lines2[4*board+skiroc].split()[2+shift]
 			# ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4+shift]
-			ConvFac_TOT2LG =  10.
+			ConvFac_TOT2LG =  13.
 
 
 			TP_TOT2LG =1200. # lines2[4*board+skiroc].split()[6+shift]
-			print hg
-			print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n" + str(adc2Mip) + "\n")
+			# print hg
+			# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n" + str(adc2Mip) + "\n")
 			if float(hg) <= float(TP_LG2HG):
 				result=float(hg)*float(adc2Mip)
 				return result
@@ -131,5 +131,5 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 				return result
 			else:
 				result = float(totSlow)*float(ConvFac_TOT2LG)*float(ConvFac_LG2HG)*float(adc2Mip)
-				print "hi"
+				# print "hi"
 				return result
