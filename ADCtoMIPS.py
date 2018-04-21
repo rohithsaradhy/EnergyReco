@@ -1,5 +1,34 @@
 result = 0.0
 
+
+def getAdc2MipBoard(brd2Module_File,calib_File=None):
+	brd = []
+	ski={}
+	for line in brd2Module_File:
+		if line.split()[0]!="#":
+			brd.append(line.split()[5])
+
+
+	for line in calib_File:
+		if line.split()[0][0]!="#":
+			#finding out  which board is this module
+			board =0
+
+			for i in range(0,len(brd)):
+				if(brd[i] == line.split()[0]):
+					board = i
+					break
+
+			ski[4*board+int(line.split()[1])] = line.split()[2]
+			# print str(board)+"\t" + str(int(line.split()[1])) +"\t"+ str(4*int(board) + int(line.split()[1])) + "\t" + line.split()[2]
+
+	return ski
+
+
+
+
+
+
 def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2Mip=None):
 	if e==None: # hg lg totSlow opt
 		# (hg, lg, totSlow, opt)
@@ -41,7 +70,7 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 		lg=d;
 		totSlow =e
 
-		ADC_per_Mips  = 50.0 # in HIGH Gain ADC
+		adc2Mip  = 0.02 # in HIGH Gain ADC
 		ConvFac_LG2HG = 8.5
 		ConvFac_TOT2LG = 2.8
 		TP_LG2HG = 1500.0
@@ -57,13 +86,13 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 		# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n")
 		# print str(ConvFac_LG2HG) + "\t" +str(TP_LG2HG) + "\t" + str(board)+"\t" + str(skiroc)
 		if hg <= TP_LG2HG:
-			result=float(hg)/float(ADC_per_Mips)
+			result=float(hg)*float(adc2Mip)
 			return result
 		elif lg <= TP_TOT2LG:
-			result = (float(lg)*float(ConvFac_LG2HG))/float(ADC_per_Mips)
+			result = (float(lg)*float(ConvFac_LG2HG))*float(adc2Mip)
 			return result
 		else:
-			result = float(totSlow)*float(ConvFac_TOT2LG)*float(ConvFac_LG2HG)/float(ADC_per_Mips)
+			result = float(totSlow)*float(ConvFac_TOT2LG)*float(ConvFac_LG2HG)*float(adc2Mip)
 			return result
 	if (e!=None and adc2Mip!=None) :
 			board = a;

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from ADCtoMIPS import ADCtoMIPS
+from ADCtoMIPS import getAdc2MipBoard
 import ROOT
 import sys
 import os
@@ -12,6 +13,8 @@ energy = 90
 
 if len(sys.argv) > 1:
     energy = int(sys.argv[1])
+
+
 
 
 
@@ -32,6 +35,14 @@ lines=f.readlines()
 # f2=open("Oct_H2_TS3_LG_TOT_Datbase.txt")
 f2=open("CalibrationInfo/Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
 lines2=f2.readlines()
+
+
+f=open("CalibrationInfo/layerGeom_oct2017_h6_20layers.txt")
+a=f.readlines()
+f=open("CalibrationInfo/hgcal_calibration.txt")
+b=f.readlines()
+ski_calib_data = getAdc2MipBoard(a,b)
+
 # print ADCtoMIPS(0,0,2700,2500,376,lines,lines2)
 '''
 Reference branches available...
@@ -108,8 +119,8 @@ for event in Tree_Input:
         TOT = (event.Hit_Sensor_Cell_ToT_Slow)[Count]
         Count +=1 # Don't forget this guy.
         # MIP = ADCtoMIPS(HG,LG,TOT,1)
-        MIP = ADCtoMIPS(Layer,skiroc,HG,LG,TOT,lines,lines2)
-        break
+        skiIndex = Layer*4 + skiroc
+        MIP = ADCtoMIPS(Layer,skiroc,HG,LG,TOT,lines,lines2,ski_calib_data[skiIndex])
         if (MIP > 2): #NTuple only records MIP > 2
             totalSum += MIP
             sumLayer[Layer] += MIP
@@ -126,11 +137,6 @@ for event in Tree_Input:
                         Total_Energy_Hist.Fill(totalSum)
                 else:
                     Total_Energy_Hist.Fill(totalSum)
-
-            for i in range(0,17):
-                if sumLayer[i]>0 :
-                    EnergyDeposited_LayerHist[i].Fill(sumLayer[i])
-                sumLayer[i] = 0
 
 
 
