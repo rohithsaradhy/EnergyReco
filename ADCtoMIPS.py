@@ -24,7 +24,7 @@ def getAdc2MipBoard(brd2Module_File,calib_File=None):
 					board=100
 
 
-			ski[4*board+int(line.split()[1])] = line.split()[2]
+			ski[4*board+int(line.split()[2])] = line.split()[3]
 			# print str(board)+"\t" + str(int(line.split()[1])) +"\t"+ str(4*int(board) + int(line.split()[1])) + "\t" + line.split()[2]
 
 	return ski
@@ -117,10 +117,10 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 			TP_LG2HG =lines[4*board+skiroc].split()[6+shift]
 			ConvFac_TOT2LG =  lines2[4*board+skiroc].split()[2+shift]
 			# ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4+shift]
-			ConvFac_TOT2LG =  13.
+			ConvFac_TOT2LG =  5.
 
 
-			TP_TOT2LG =1200. # lines2[4*board+skiroc].split()[6+shift]
+			TP_TOT2LG =5000. # lines2[4*board+skiroc].split()[6+shift]
 			# print hg
 			# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n" + str(adc2Mip) + "\n")
 			if float(hg) <= float(TP_LG2HG):

@@ -18,10 +18,14 @@ if len(sys.argv) > 1:
 
 
 
-
-# F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/New_Data/Oct_NTuple/Electron/"+str(energy)+"GeV.root"
-F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Electron/"+str(energy)+"GeV.root"
+# For Here
+# F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Electron/"+str(energy)+"GeV.root"
 # F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Pion/"+str(energy)+"GeV.root"
+
+# For Zeb
+# F_Input_Name = "/local/cms/user/saradhy/public/data/data_27_3_2018/H2/Pion/"+str(energy)+"GeV.root"
+# F_Input_Name = "/local/cms/user/saradhy/public/data/data_27_3_2018/H2/Electron/"+str(energy)+"GeV.root"
+
 print "Opening File: " + F_Input_Name
 F_Input = ROOT.TFile(F_Input_Name)
 Tree_Input = F_Input.Get("pulseshapeplotter/T")#
@@ -83,7 +87,7 @@ Reference branches available...
 '''
 
 name = "Energy All Layers for Energy " + str(energy) + " GeV"
-Total_Energy_Hist = ROOT.TH1F(name,name,110,0,3000)
+Total_Energy_Hist = ROOT.TH1F(name,name,85,0,3000)
 
 check = 0.0
 maxEvents = Tree_Input.GetEntries()
@@ -158,3 +162,5 @@ print
 name = "./Analysed/AllLayer_"+str(energy)+"GeV_"+fitName+".png"
 Total_Energy_Hist.Draw()
 ROOT.gPad.SaveAs(name)
+
+# raw_input("Enter to exit")
