@@ -19,7 +19,7 @@ if len(sys.argv) > 1:
 
 
 # For Here
-# F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Electron/"+str(energy)+"GeV.root"
+F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Electron/"+str(energy)+"GeV.root"
 # F_Input_Name = "/home/rsaradhy/Work/Output/TransitionH_L/Data/data_27_3_2018/H2/Pion/"+str(energy)+"GeV.root"
 
 # For Zeb
@@ -30,25 +30,32 @@ print "Opening File: " + F_Input_Name
 F_Input = ROOT.TFile(F_Input_Name)
 Tree_Input = F_Input.Get("pulseshapeplotter/T")#
 
-
+fitName = 'CrazyValue'
 # for ADCtoMIPs ...
-# f=open("CalibrationInfo/Oct_H2_PFA_HG_LG_Datbase.txt")
+f=open("CalibrationInfo/Oct_H2_PFA_HG_LG_Datbase.txt")
 # f=open("CalibrationInfo/Oct_H2_TS3_HG_LG_Datbase.txt")
-f=open("CalibrationInfo/Oct_H2_TS3_CM_HG_LG_Datbase.txt")
+# f=open("CalibrationInfo/Oct_H2_TS3_CM_HG_LG_Datbase.txt")
 HG2LG_Calib=f.readlines()
+f=open("CalibrationInfo/Final_Oct_H2_PFA_LG_TOT_Datbase.txt")
 # f=open("CalibrationInfo/Oct_H2_PFA_LG_TOT_Datbase.txt")
 # f=open("CalibrationInfo/Oct_H2_TS3_LG_TOT_Datbase.txt")
-f=open("CalibrationInfo/Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
+# f=open("CalibrationInfo/Oct_H2_TS3_CM_LG_TOT_Datbase.txt")
 LG2TOT_Calib=f.readlines()
 
 
 f=open("CalibrationInfo/layerGeom_oct2017_h2_17layers.txt")
 a=f.readlines()
-f=open("CalibrationInfo/hgcal_calibration.txt")
+# f=open("CalibrationInfo/TS3_SkirocAverages_MIPs.txt")
+f=open("CalibrationInfo/defaultPS_SkirocAverages_MIPs.txt")
 b=f.readlines()
 ski_calib_data = getAdc2MipBoard(a,b)
-# print ski_calib_data[0]
-# print ADCtoMIPS(0,0,1661.95,1200.1,170,HG2LG_Calib,LG2TOT_Calib,ski_calib_data[0])
+sum = 0.0
+for i in range(0,len(ski_calib_data)):
+    sum += float(ski_calib_data[i])
+
+
+print sum/len(ski_calib_data)
+# # print ADCtoMIPS(0,0,1661.95,1200.1,170,HG2LG_Calib,LG2TOT_Calib,ski_calib_data[0])
 # raw_input("enter to continue")
 
 
@@ -87,7 +94,11 @@ Reference branches available...
 '''
 
 name = "Energy All Layers for Energy " + str(energy) + " GeV"
-Total_Energy_Hist = ROOT.TH1F(name,name,85,0,3000)
+
+bin = {90:80,80:90,50:110,32:120,20:130}
+
+print bin[energy]
+Total_Energy_Hist = ROOT.TH1F(name,name,bin[energy],0,4000)
 
 check = 0.0
 maxEvents = Tree_Input.GetEntries()
@@ -108,10 +119,10 @@ for event in Tree_Input:
     ii=0
     for Layer in event.Hit_Sensor_Layer:
         skiroc = (event.Hit_Sensor_Skiroc)[Count]
-        HG = (event.Hit_Sensor_Cell_HG)[Count]  - (event.Hit_Sensor_Cell_HG_Sub)[Count]
-        LG = (event.Hit_Sensor_Cell_LG)[Count] - (event.Hit_Sensor_Cell_LG_Sub)[Count]
-        # HG = (event.Hit_Sensor_Cell_HG_Amplitude)[Count]
-        # LG = (event.Hit_Sensor_Cell_LG_Amplitude)[Count]
+        # HG = (event.Hit_Sensor_Cell_HG)[Count]  - (event.Hit_Sensor_Cell_HG_Sub)[Count]
+        # LG = (event.Hit_Sensor_Cell_LG)[Count] - (event.Hit_Sensor_Cell_LG_Sub)[Count]
+        HG = (event.Hit_Sensor_Cell_HG_Amplitude)[Count]
+        LG = (event.Hit_Sensor_Cell_LG_Amplitude)[Count]
         TOT = (event.Hit_Sensor_Cell_ToT_Slow)[Count]
         Count +=1 # Don't forget this guy.
         # MIP = ADCtoMIPS(HG,LG,TOT,1)
@@ -150,7 +161,7 @@ GausSig = Fit.Parameter(2)
 GausSigErr = Fit.ParError(2)
 ROOT.gStyle.SetOptFit(0000)
 print str(GausMean) + "\t" + str(GausSig)+ "\t" + str(MPV)
-fitName = 'CF13'
+
 filename = "Analysed/OutputForLinearPlot_"+fitName+".txt"
 file = open(filename,'a')
 outText = fitName + "\t" + str(energy) + "\t"+str(GausMean)+ "\t"+str(GausMeanErr) + "\t" + str(GausSig)+ "\t"+str(GausSigErr)+ "\t" + str(MPV) +"\n"
@@ -161,6 +172,8 @@ file.close()
 print
 name = "./Analysed/AllLayer_"+str(energy)+"GeV_"+fitName+".png"
 Total_Energy_Hist.Draw()
+Total_Energy_Hist.GetYaxis().SetTitle("Counts");
+Total_Energy_Hist.GetXaxis().SetTitle("Energy Deposited in All Layers(MIPS)");
 ROOT.gPad.SaveAs(name)
 
 # raw_input("Enter to exit")

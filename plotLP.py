@@ -3,7 +3,7 @@ import ROOT
 from array import array
 
 ROOT.gROOT.SetBatch(ROOT.kTRUE)
-fitName = 'CF13'
+fitName = 'CrazyValue'
 filename = "Analysed/OutputForLinearPlot_"+fitName+".txt"
 f=open(filename)
 lines=f.readlines()

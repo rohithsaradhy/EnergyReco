@@ -116,20 +116,20 @@ def ADCtoMIPS(a=None, b=None, c=None, d=None,e=None,lines=None,lines2=None,adc2M
 			ConvFac_LG2HG=lines[4*board+skiroc].split()[2+shift]
 			TP_LG2HG =lines[4*board+skiroc].split()[6+shift]
 			ConvFac_TOT2LG =  lines2[4*board+skiroc].split()[2+shift]
-			# ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4+shift]
-			ConvFac_TOT2LG =  5.
+			ConvFac_Intercept_TOT2LG = lines2[4*board+skiroc].split()[4+shift]
+			ConvFac_TOT2LG =  100.
 
 
-			TP_TOT2LG =5000. # lines2[4*board+skiroc].split()[6+shift]
+			TP_TOT2LG = 1200 #lines2[4*board+skiroc].split()[6+shift]
 			# print hg
 			# print("These are the points for the particular board. \n"+str(ConvFac_LG2HG) + "\n"+str(TP_LG2HG) + "\n"+str(ConvFac_TOT2LG) + "\n"+str(TP_TOT2LG) + "\n" + str(adc2Mip) + "\n")
 			if float(hg) <= float(TP_LG2HG):
-				result=float(hg)*float(adc2Mip)
+				result=float(hg)/float(adc2Mip)
 				return result
 			elif float(lg) <= float(TP_TOT2LG):
-				result = (float(lg)*float(ConvFac_LG2HG))*float(adc2Mip)
+				result = (float(lg)*float(ConvFac_LG2HG))/float(adc2Mip)
 				return result
 			else:
-				result = float(totSlow)*float(ConvFac_TOT2LG)*float(ConvFac_LG2HG)*float(adc2Mip)
+				result = (float(totSlow)*float(ConvFac_TOT2LG))*float(ConvFac_LG2HG)/float(adc2Mip)
 				# print "hi"
 				return result
